@@ -1,0 +1,10 @@
+# Normalize to LF in the index and the working tree, so Prettier's
+# endOfLine: "lf" holds on Windows checkouts too (core.autocrlf is ignored here).
+* text=auto eol=lf
+
+# Binary
+*.pdf binary
+*.png binary
+*.jpg binary
+*.webm binary
+*.zip binary

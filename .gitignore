@@ -6,3 +6,10 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+.env
+
+# Compiled output (nothing should be emitted; tsconfig is noEmit)
+dist/
+*.js.map
+*.d.ts
+*.d.ts.map
