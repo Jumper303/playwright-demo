@@ -1,19 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-import path from "path";
-import { fileURLToPath } from "url";
-import dotenv from "dotenv";
-
-/**
- * Resolve .env next to this config file (not process.cwd()), so workers/IDE
- * launches still find it. Use the parsed value — do not rely on process.env
- * alone, because Playwright workers may not see dotenv mutations.
- */
-const rootDir = path.dirname(fileURLToPath(import.meta.url));
-const envPath = path.resolve(rootDir, ".env");
-const { parsed, error } = dotenv.config({ path: envPath });
-if (error) {
-  throw new Error(`Failed to load ${envPath}: ${error.message}`);
-}
+import { envConfig } from "./src/env_config.js";
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -42,7 +28,7 @@ export default defineConfig({
       name: "sauce",
       use: {
         ...devices["Desktop Chrome"],
-        baseURL: parsed?.PURCHASE_BASE_URL ?? "https://www.saucedemo.com/",
+        baseURL: envConfig().PURCHASE_BASE_URL,
       },
     },
 
