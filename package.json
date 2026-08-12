@@ -4,6 +4,10 @@
   "description": "",
   "type": "module",
   "main": "index.js",
+  "imports": {
+    "#fixtures/*.js": "./src/fixtures/*.ts",
+    "#pages/*.js": "./src/pages/*.ts"
+  },
   "engines": {
     "node": ">=22.13.0"
   },
