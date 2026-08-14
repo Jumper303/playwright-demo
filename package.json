@@ -3,13 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "index.js",
-  "imports": {
-    "#fixtures/*.js": "./src/fixtures/*.ts",
-    "#pages/*.js": "./src/pages/*.ts"
-  },
   "engines": {
-    "node": ">=22.13.0"
+    "node": "24",
+    "pnpm": ">=10.18.3"
   },
   "scripts": {
     "test": "npx playwright test",

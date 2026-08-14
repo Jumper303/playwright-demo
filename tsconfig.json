@@ -1,15 +1,20 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
+  "ts-node": {
+    "compilerOptions": {
+      "module": "nodenext",
+      "moduleResolution": "nodenext"
+    }
+  },
   "compilerOptions": {
     "noEmit": true,
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "ES2022",
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "target": "es2022",
     "types": ["node"],
     "resolveJsonModule": true,
+
     // For nodejs:
-    "lib": ["ES2022"],
+    "lib": ["es2022"],
 
     // Other Outputs
     "sourceMap": true,
@@ -34,7 +39,13 @@
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true
-  }
+    "moduleDetection": "auto",
+    "skipLibCheck": true,
+    "paths": {
+      "@fixtures/*": ["./src/fixtures/*"],
+      "@pages/*": ["./src/pages/*"]
+    }
+  },
+  "include": ["src", "tests", "*.ts"],
+  "exclude": ["node_modules", ".output", "dist"]
 }

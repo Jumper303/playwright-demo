@@ -1,5 +1,5 @@
 import { test as base } from "@playwright/test";
-import { SauceLoginPage } from "../pages/sauce-login-page.js";
+import { SauceLoginPage } from "../pages/sauce-login-page";
 
 export const test = base.extend<{
   sauceLoginPage: SauceLoginPage;
