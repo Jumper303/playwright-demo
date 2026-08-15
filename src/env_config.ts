@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 type EnvConfig = {
   PURCHASE_BASE_URL: string | undefined;
+  ONLINE_HTML_EDITOR_BASE_URL: string | undefined;
 };
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
@@ -20,6 +21,8 @@ export function envConfig(): EnvConfig {
     case "PROD":
       return {
         PURCHASE_BASE_URL: parsed?.PURCHASE_BASE_URL ?? "https://www.saucedemo.com/",
+        ONLINE_HTML_EDITOR_BASE_URL:
+          parsed?.ONLINE_HTML_EDITOR_BASE_URL ?? "https://onlinehtmleditor.dev/",
       };
     default:
       throw new Error(

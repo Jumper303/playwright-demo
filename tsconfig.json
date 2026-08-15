@@ -13,8 +13,8 @@
     "types": ["node"],
     "resolveJsonModule": true,
 
-    // For nodejs:
-    "lib": ["es2022"],
+    // For nodejs + browser evaluate() callbacks:
+    "lib": ["es2022", "DOM"],
 
     // Other Outputs
     "sourceMap": true,

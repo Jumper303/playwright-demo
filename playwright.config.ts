@@ -16,7 +16,7 @@ export default defineConfig({
   ...(process.env.CI ? { workers: 1 } : {}),
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: "html",
-
+  workers: 2,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     trace: "on-first-retry",
@@ -26,11 +26,19 @@ export default defineConfig({
   projects: [
     {
       name: "sauce",
+      testDir: "./tests/sauce",
       use: {
         ...devices["Desktop Chrome"],
         baseURL: envConfig().PURCHASE_BASE_URL,
       },
-      workers: 2,
+    },
+    {
+      name: "rich-text-editor",
+      testDir: "./tests/rich-text-editor",
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: envConfig().ONLINE_HTML_EDITOR_BASE_URL,
+      },
     },
   ],
 });
