@@ -16,9 +16,10 @@ export default defineConfig({
   ...(process.env.CI ? { workers: 1 } : {}),
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: "html",
+
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    trace: "on",
+    trace: "on-first-retry",
   },
 
   /* Configure projects for major browsers */
@@ -29,6 +30,7 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         baseURL: envConfig().PURCHASE_BASE_URL,
       },
+      workers: 2,
     },
   ],
 });

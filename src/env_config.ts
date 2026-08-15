@@ -22,6 +22,8 @@ export function envConfig(): EnvConfig {
         PURCHASE_BASE_URL: parsed?.PURCHASE_BASE_URL ?? "https://www.saucedemo.com/",
       };
     default:
-      throw new Error(`Invalid environment: ${process.env.NODE_ENV}`);
+      throw new Error(
+        `Invalid environment: ${process.env.TEST_ENV}. Please set TEST_ENV environment variable to DEV, STAGING, or PROD.`,
+      );
   }
 }

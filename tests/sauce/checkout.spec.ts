@@ -1,10 +1,16 @@
 import { expect } from "@playwright/test";
 import { test } from "@fixtures/sauce-fixture";
 import credentials from "../resources/credential.json" with { type: "json" };
+import standardCredentials from "../resources/standard-credentials.json" with { type: "json" };
 
-test.describe("purchase process", () => {
-  test("should be able to perform purchase process", async ({
-    page,
+test.describe("Purchase process", () => {
+  test.beforeEach(async ({ page }) => {
+    await test.step("navigate to inventory page", async () => {
+      await page.goto("/inventory.html");
+    });
+  });
+
+  test("Should be able to successfully perform purchase process", async ({
     sauceLoginPage,
     sauceShoppingCartPage,
     sauceCheckoutInfoPage,
@@ -16,10 +22,6 @@ test.describe("purchase process", () => {
       postalCode: "12345",
     };
 
-    await test.step("navigate to inventory page", async () => {
-      await page.goto("/inventory.html");
-    });
-
     await test.step("login", async () => {
       await sauceLoginPage.login(credentials.username, credentials.password);
       await expect(sauceLoginPage.productsTitle).toBeVisible();
@@ -27,8 +29,8 @@ test.describe("purchase process", () => {
 
     for (const item of shoppingCartItems) {
       await test.step(`add ${item} to cart`, async () => {
-        await sauceLoginPage.addToCart(item);
-        const shoppingCartBadge = await sauceLoginPage.getShoppingCartBadge();
+        await sauceShoppingCartPage.addToCart(item);
+        const shoppingCartBadge = await sauceShoppingCartPage.getShoppingCartBadge();
         expect(shoppingCartBadge).toBe(shoppingCartItems.indexOf(item) + 1);
       });
     }
@@ -50,6 +52,26 @@ test.describe("purchase process", () => {
     await test.step("finish checkout process", async () => {
       await sauceCheckoutInfoPage.finishButton.click();
       await expect(sauceCheckoutInfoPage.completedTitle).toHaveText("Thank you for your order!");
+    });
+  });
+
+  test("Verify error messages for mandatory fields", async ({
+    sauceLoginPage,
+    sauceShoppingCartPage,
+  }) => {
+    await test.step("login with empty credentials", async () => {
+      await sauceLoginPage.loginButton.click();
+      await expect(sauceLoginPage.errorMessage).toHaveText("Epic sadface: Username is required");
+    });
+
+    await test.step("login with standard credentials", async () => {
+      await sauceLoginPage.login(standardCredentials.username, standardCredentials.password);
+    });
+
+    await test.step("verify footer messages", async () => {
+      await sauceShoppingCartPage.footerMessages.scrollIntoViewIfNeeded();
+      await expect(sauceShoppingCartPage.footerMessages).toContainText("2026");
+      await expect(sauceShoppingCartPage.footerMessages).toContainText("Terms of Service");
     });
   });
 });
