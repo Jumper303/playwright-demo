@@ -7,8 +7,14 @@ test.describe("purchase process", () => {
     page,
     sauceLoginPage,
     sauceShoppingCartPage,
+    sauceCheckoutInfoPage,
   }) => {
     const shoppingCartItems = ["sauce-labs-backpack", "sauce-labs-fleece-jacket"];
+    const checkoutInfoData = {
+      firstName: "John",
+      lastName: "Doe",
+      postalCode: "12345",
+    };
 
     await test.step("navigate to inventory page", async () => {
       await page.goto("/inventory.html");
@@ -27,9 +33,23 @@ test.describe("purchase process", () => {
       });
     }
 
-    await test.step("checkout", async () => {
+    await test.step("start checkout process", async () => {
       await sauceShoppingCartPage.shoppingCartLink.click();
       await sauceShoppingCartPage.checkoutButton.click();
+    });
+
+    await test.step("fill checkout info", async () => {
+      await sauceCheckoutInfoPage.fillCheckoutInfo(
+        checkoutInfoData.firstName,
+        checkoutInfoData.lastName,
+        checkoutInfoData.postalCode,
+      );
+      await sauceCheckoutInfoPage.continueButton.click();
+    });
+
+    await test.step("finish checkout process", async () => {
+      await sauceCheckoutInfoPage.finishButton.click();
+      await expect(sauceCheckoutInfoPage.completedTitle).toHaveText("Thank you for your order!");
     });
   });
 });
