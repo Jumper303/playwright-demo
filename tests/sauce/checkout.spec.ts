@@ -6,7 +6,7 @@ import standardCredentials from "../resources/standard-credentials.json" with { 
 test.describe("Purchase process", () => {
   test.beforeEach(async ({ page }) => {
     await test.step("navigate to inventory page using base URL", async () => {
-      await page.goto("");
+      await page.goto("", { waitUntil: "domcontentloaded" });
     });
   });
 

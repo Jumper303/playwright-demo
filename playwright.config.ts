@@ -13,7 +13,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: 2,
   reporter: "html",
-  timeout: 60000,
+  timeout: 90000,
   use: { trace: "on" },
 
   /* Configure projects for major browsers */

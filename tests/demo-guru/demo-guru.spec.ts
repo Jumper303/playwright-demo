@@ -3,7 +3,7 @@ import { expect } from "@playwright/test";
 
 test("Verify Demo Guru Home Page Elements", async ({ page, demoGuruPage }) => {
   await test.step("Navigate to Demo Guru Home Page using the baseUrl", async () => {
-    await page.goto("");
+    await page.goto("", { waitUntil: "domcontentloaded" });
   });
 
   await test.step("Open Advertisement Image in New Tab", async () => {
