@@ -12,15 +12,16 @@ export class DemoGuruPage {
     this.advertisementImage = this.page
       .locator('iframe[name="a077aa5e"]')
       .contentFrame()
-      .getByRole("img");
+      .getByRole("link");
     this.topMenu = this.page.locator(".menu-block");
     this.testingSubMenu = this.topMenu.getByRole("link", { name: "Testing " });
     this.startLearningButton = this.page.getByRole("link", { name: "Start Learning" });
   }
 
-  async openAdvertisementImageInNewTab(): Promise<Page> {
+  async openAdvertisementLinkInNewTab(): Promise<Page> {
+    const newTab = this.page.context().waitForEvent("page");
     await this.advertisementImage.click();
-    return await this.page.context().waitForEvent("page");
+    return await newTab;
   }
 
   async openSeleniumSubMenu(): Promise<void> {

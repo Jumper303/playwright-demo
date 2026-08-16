@@ -7,7 +7,7 @@ test("Verify Demo Guru Home Page Elements", async ({ page, demoGuruPage }) => {
   });
 
   await test.step("Open Advertisement Image in New Tab", async () => {
-    const newTab = await demoGuruPage.openAdvertisementImageInNewTab();
+    const newTab = await demoGuruPage.openAdvertisementLinkInNewTab();
     await newTab.waitForLoadState("load");
     expect(await newTab.title()).toContain("Selenium Live Project for Practice");
     await newTab.close();

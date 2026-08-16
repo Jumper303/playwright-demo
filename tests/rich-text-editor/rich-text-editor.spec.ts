@@ -13,6 +13,7 @@ test.describe("Rich Test Editor", () => {
 
     await test.step("Insert text", async () => {
       await richTextEditorPage.insertText("Automation Test Example");
+      await expect(richTextEditorPage.richTextEditor).toHaveText("Automation Test Example");
     });
 
     await test.step("Format text as bold", async () => {

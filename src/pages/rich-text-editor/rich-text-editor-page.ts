@@ -1,9 +1,8 @@
 import type { Page, Locator } from "@playwright/test";
-import { expect } from "@playwright/test";
 
 export class RichTextEditorPage {
   private page: Page;
-  private richTextEditor: Locator;
+  readonly richTextEditor: Locator;
   private boldButton: Locator;
   private underlineButton: Locator;
   private allowCookiesButton: Locator;
@@ -11,9 +10,8 @@ export class RichTextEditorPage {
   constructor(page: Page) {
     this.page = page;
     this.richTextEditor = this.page
-      .getByRole("presentation")
-      .getByLabel("Rich Text Editor. Editing area: main. Press Alt+0 for help.")
-      .locator("[data-placeholder='Type or paste your content here!']");
+      .getByRole("textbox", { name: "Rich Text Editor. Editing" })
+      .getByRole("paragraph");
     this.boldButton = this.page.getByRole("button", { name: "Bold" });
     this.underlineButton = this.page.getByRole("button", { name: "Underline" });
     this.allowCookiesButton = this.page.getByRole("button", { name: "Allow all cookies" });
@@ -25,7 +23,6 @@ export class RichTextEditorPage {
 
   async insertText(text: string) {
     await this.richTextEditor.fill(text);
-    await expect(this.richTextEditor).toHaveText(text);
   }
 
   async formatText(text: string, format: string) {
@@ -41,12 +38,14 @@ export class RichTextEditorPage {
     }
   }
 
-  findFormattedText(text: string, format: TextFormat): Locator {
+  findFormattedText(text: string, format: string): Locator {
     switch (format) {
       case "bold":
         return this.richTextEditor.locator("strong", { hasText: text });
       case "underline":
         return this.richTextEditor.locator("u", { hasText: text });
+      default:
+        throw new Error(`Unsupported text format: ${format}`);
     }
   }
 
@@ -70,8 +69,7 @@ export class RichTextEditorPage {
 
         const start = content.indexOf(text);
         if (start < 0) {
-          console.log(`Text ${text} not found in content ${content}`);
-          continue;
+          throw new Error(`Text ${text} not found in content ${content}`);
         }
 
         range.setStart(child, start);

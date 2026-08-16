@@ -11,9 +11,9 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : 2,
+  workers: 2,
   reporter: "html",
-  timeout: 90000,
+  timeout: 30000,
   use: { trace: "on" },
 
   /* Configure projects for major browsers */
