@@ -21,7 +21,7 @@ Available projects (each project define it's own baseUrl and test directory)
 - demo-guru
 - api-testing
 
-Installation and usage
+Installation and execution
 
 - npm install -g pnpm && pnpm install
 - pnpm exec playwright install --with-deps
