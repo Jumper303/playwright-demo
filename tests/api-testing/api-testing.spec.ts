@@ -1,7 +1,4 @@
 import { expect, test } from "@playwright/test";
-import { Logger } from "tslog";
-
-const logger = new Logger();
 
 type UserPayload = {
   name: string;
@@ -16,15 +13,14 @@ test("Verify users API", async ({ request }) => {
   });
 
   const users = await test.step("Parse users list", async () => {
-    const usersList: unknown = JSON.parse(await response.text());
-    const parsed = usersList as UserPayload[];
-    expect(parsed.length).toBeGreaterThan(0);
+    const usersList = JSON.parse(await response.text()) as UserPayload[];
+    expect(usersList.length).toBeGreaterThan(0);
 
-    for (const user of parsed) {
-      logger.info(`${user.name} - ${user.email}`);
+    for (const user of usersList) {
+      console.log(`${user.name} - ${user.email}`);
     }
 
-    return parsed;
+    return usersList;
   });
 
   await test.step("Verify users list", () => {
