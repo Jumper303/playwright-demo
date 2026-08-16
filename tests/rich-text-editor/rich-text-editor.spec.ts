@@ -4,10 +4,25 @@ import { test } from "@fixtures/rich-text-editor-fixture";
 test.describe("Rich Test Editor", () => {
   test("Should be able to successfully format text", async ({ page, richTextEditorPage }) => {
     await page.goto("/");
-    await richTextEditorPage.insertText("Automation Test Example");
-    await richTextEditorPage.formatTextBold("Automation");
-    await expect(richTextEditorPage.boldText("Automation")).toBeVisible();
-    await richTextEditorPage.formatTextUnderline("Test");
-    await expect(richTextEditorPage.underlineText("Test")).toBeVisible();
+
+    await test.step("Allow cookies", async () => {
+      await richTextEditorPage.allowCookies();
+    });
+
+    await test.step("Insert text", async () => {
+      await richTextEditorPage.insertText("Automation Test Example");
+    });
+
+    await test.step("Format text as bold", async () => {
+      const boldFormat = "bold";
+      await richTextEditorPage.formatText("Automation", boldFormat);
+      await expect(richTextEditorPage.findFormattedText("Automation", boldFormat)).toBeVisible();
+    });
+
+    await test.step("Format text as underline", async () => {
+      const underlineFormat = "underline";
+      await richTextEditorPage.formatText("Test", underlineFormat);
+      await expect(richTextEditorPage.findFormattedText("Test", underlineFormat)).toBeVisible();
+    });
   });
 });

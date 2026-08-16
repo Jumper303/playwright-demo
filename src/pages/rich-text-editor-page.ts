@@ -1,102 +1,85 @@
 import type { Page, Locator } from "@playwright/test";
-
-/** Structural browser types — DOM globals are unresolved inside Playwright evaluate(). */
-type BrowserRange = {
-  setStart: (node: BrowserTextNode, offset: number) => void;
-  setEnd: (node: BrowserTextNode, offset: number) => void;
-};
-
-type BrowserTextNode = {
-  textContent: string | null;
-};
-
-type BrowserSelection = {
-  removeAllRanges: () => void;
-  addRange: (range: BrowserRange) => void;
-};
-
-type BrowserDocument = {
-  defaultView: { getSelection: () => BrowserSelection | null } | null;
-  createTreeWalker: (
-    root: BrowserElement,
-    whatToShow: number,
-  ) => { nextNode: () => BrowserTextNode | null };
-  createRange: () => BrowserRange;
-};
-
-type BrowserElement = {
-  ownerDocument: BrowserDocument;
-};
+import { expect } from "@playwright/test";
 
 export class RichTextEditorPage {
   private page: Page;
   private richTextEditor: Locator;
   private boldButton: Locator;
   private underlineButton: Locator;
+  private allowCookiesButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.richTextEditor = this.page
       .getByRole("presentation")
-      .getByLabel("Rich Text Editor. Editing area: main. Press Alt+0 for help.");
+      .getByLabel("Rich Text Editor. Editing area: main. Press Alt+0 for help.")
+      .locator("[data-placeholder='Type or paste your content here!']");
     this.boldButton = this.page.getByRole("button", { name: "Bold" });
     this.underlineButton = this.page.getByRole("button", { name: "Underline" });
+    this.allowCookiesButton = this.page.getByRole("button", { name: "Allow all cookies" });
+  }
+
+  async allowCookies() {
+    await this.allowCookiesButton.click();
   }
 
   async insertText(text: string) {
     await this.richTextEditor.fill(text);
+    await expect(this.richTextEditor).toHaveText(text);
   }
 
-  async formatTextBold(text: string) {
-    await this.richTextEditor.focus();
-    await this.selectText(text);
-    await this.boldButton.click();
+  async formatText(text: string, format: string) {
+    await this.richTextEditor.click();
+    await this.selectTextByTextContent(text);
+    switch (format) {
+      case "bold":
+        await this.boldButton.click();
+        break;
+      case "underline":
+        await this.underlineButton.click();
+        break;
+    }
   }
 
-  async formatTextUnderline(text: string) {
-    await this.richTextEditor.focus();
-    await this.selectText(text);
-    await this.underlineButton.click();
+  findFormattedText(text: string, format: TextFormat): Locator {
+    switch (format) {
+      case "bold":
+        return this.richTextEditor.locator("strong", { hasText: text });
+      case "underline":
+        return this.richTextEditor.locator("u", { hasText: text });
+    }
   }
 
-  boldText(text: string): Locator {
-    return this.richTextEditor.locator("strong", { hasText: text });
-  }
-
-  underlineText(text: string): Locator {
-    return this.richTextEditor.locator("u", { hasText: text });
-  }
-
-  private async selectText(searchText: string) {
+  async selectTextByTextContent(searchText: string) {
     await this.richTextEditor.evaluate((element, text) => {
-      const editor = element as unknown as BrowserElement;
-      const document = editor.ownerDocument;
-      const selection = document.defaultView?.getSelection();
+      const doc = element.ownerDocument;
+      const selection = doc.defaultView?.getSelection();
+      const range = doc.createRange();
 
-      if (!selection) {
-        throw new Error("The editor's window exposes no selection.");
-      }
-
-      // Range offsets count characters only inside text nodes; on element nodes
-      // they count child nodes, so the match has to be resolved to a text node.
-      // NodeFilter.SHOW_TEXT === 4 (inlined: evaluate cannot close over outer vars)
-      const walker = document.createTreeWalker(editor, 4);
-
-      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-        const start = node.textContent?.indexOf(text) ?? -1;
-        if (start < 0) {
+      for (let i = 0; i < element.childNodes.length; i++) {
+        const child = element.childNodes.item(i);
+        if (!child) {
           continue;
         }
 
-        const range = document.createRange();
-        range.setStart(node, start);
-        range.setEnd(node, start + text.length);
-        selection.removeAllRanges();
-        selection.addRange(range);
+        const content = child.textContent;
+        // process only text nodes
+        if (child.nodeType !== 3 || content == null) {
+          continue;
+        }
+
+        const start = content.indexOf(text);
+        if (start < 0) {
+          console.log(`Text ${text} not found in content ${content}`);
+          continue;
+        }
+
+        range.setStart(child, start);
+        range.setEnd(child, start + text.length);
+        selection?.removeAllRanges();
+        selection?.addRange(range);
         return;
       }
-
-      throw new Error(`No text node of the editor contains "${text}".`);
     }, searchText);
   }
 }

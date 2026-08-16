@@ -1,5 +1,4 @@
 import { defineConfig, devices } from "@playwright/test";
-import { envConfig } from "./src/env_config";
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -19,7 +18,7 @@ export default defineConfig({
   workers: 2,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    trace: "on-first-retry",
+    trace: "on",
   },
 
   /* Configure projects for major browsers */
@@ -29,7 +28,9 @@ export default defineConfig({
       testDir: "./tests/sauce",
       use: {
         ...devices["Desktop Chrome"],
-        baseURL: envConfig().PURCHASE_BASE_URL,
+        // Simplified base URL for demonstration purposes.
+        // Real life projects would use a TEST_ENV variable to set the base URL based on the target test environment.
+        baseURL: "https://www.saucedemo.com/",
       },
     },
     {
@@ -37,7 +38,7 @@ export default defineConfig({
       testDir: "./tests/rich-text-editor",
       use: {
         ...devices["Desktop Chrome"],
-        baseURL: envConfig().ONLINE_HTML_EDITOR_BASE_URL,
+        baseURL: "https://onlinehtmleditor.dev/",
       },
     },
   ],

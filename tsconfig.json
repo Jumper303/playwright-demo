@@ -14,7 +14,7 @@
     "resolveJsonModule": true,
 
     // For nodejs + browser evaluate() callbacks:
-    "lib": ["es2022", "DOM"],
+    "lib": ["es2022", "DOM", "DOM.Iterable"],
 
     // Other Outputs
     "sourceMap": true,
