@@ -14,7 +14,7 @@ export default defineConfig({
   workers: 2,
   reporter: "html",
   timeout: 30000,
-  use: { trace: "on" },
+  use: { trace: "on-first-retry" },
 
   /* Configure projects for major browsers */
   projects: [

@@ -27,10 +27,14 @@ test.describe("Purchase process", () => {
       await expect(sauceLoginPage.productsTitle).toBeVisible();
     });
 
+    let shoppingCartBadge: number;
     for (const item of shoppingCartItems) {
       await test.step(`add ${item} to cart`, async () => {
         await sauceShoppingCartPage.addToCart(item);
-        const shoppingCartBadge = await sauceShoppingCartPage.getShoppingCartBadge();
+        shoppingCartBadge = await sauceShoppingCartPage.getShoppingCartBadge();
+      });
+
+      await test.step(`verify shopping cart badge is ${shoppingCartItems.indexOf(item) + 1}`, () => {
         expect(shoppingCartBadge).toBe(shoppingCartItems.indexOf(item) + 1);
       });
     }

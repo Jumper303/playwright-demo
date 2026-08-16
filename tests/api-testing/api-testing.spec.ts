@@ -25,7 +25,7 @@ test("Verify users API", async ({ request }) => {
     return usersList;
   });
 
-  await test.step("Verify users list", () => {
+  await test.step("Verify the first user email contains @", () => {
     expect(users[0]!.email).toContain("@");
   });
 });
