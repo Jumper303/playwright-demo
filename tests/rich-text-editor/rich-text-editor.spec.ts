@@ -3,7 +3,9 @@ import { test } from "@fixtures/rich-text-editor-fixture";
 
 test.describe("Rich Test Editor", () => {
   test("Should be able to successfully format text", async ({ page, richTextEditorPage }) => {
-    await page.goto("/");
+    await test.step("Navigate to Rich Text Editor Page by using the baseUrl", async () => {
+      await page.goto("");
+    });
 
     await test.step("Allow cookies", async () => {
       await richTextEditorPage.allowCookies();

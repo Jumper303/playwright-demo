@@ -1,7 +1,7 @@
 import { test as base } from "@playwright/test";
-import { SauceLoginPage } from "../pages/sauce-login-page";
-import { SauceShoppingCartPage } from "../pages/sauce-shopping-cart-page";
-import { SauceCheckoutInfoPage } from "../pages/sauce-checkout-info-page";
+import { SauceLoginPage } from "../pages/sauce/sauce-login-page";
+import { SauceShoppingCartPage } from "../pages/sauce/sauce-shopping-cart-page";
+import { SauceCheckoutInfoPage } from "../pages/sauce/sauce-checkout-info-page";
 
 export const test = base.extend<{
   sauceLoginPage: SauceLoginPage;

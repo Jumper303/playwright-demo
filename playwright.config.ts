@@ -30,7 +30,7 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         // Simplified base URL for demonstration purposes.
         // Real life projects would use a TEST_ENV variable to set the base URL based on the target test environment.
-        baseURL: "https://www.saucedemo.com/",
+        baseURL: "https://www.saucedemo.com/inventory.html",
       },
     },
     {
@@ -39,6 +39,14 @@ export default defineConfig({
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "https://onlinehtmleditor.dev/",
+      },
+    },
+    {
+      name: "demo-guru",
+      testDir: "./tests/demo-guru",
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: "https://demo.guru99.com/test/guru99home/",
       },
     },
   ],
