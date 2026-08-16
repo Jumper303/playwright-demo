@@ -49,5 +49,13 @@ export default defineConfig({
         baseURL: "https://demo.guru99.com/test/guru99home/",
       },
     },
+    {
+      name: "api-testing",
+      testDir: "./tests/api-testing",
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: "https://jsonplaceholder.typicode.com",
+      },
+    },
   ],
 });
