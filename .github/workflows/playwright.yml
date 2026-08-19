@@ -10,10 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/setup@v2
         with:
-          node-version: 24
-      - uses: pnpm/action-setup@v4
+          version: 10
+          runtime: node@24
+          cache: true
       - name: Lint code
         run: pnpm lint:check
       - name: Typecheck code
