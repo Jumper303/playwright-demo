@@ -10,8 +10,8 @@
   "scripts": {
     "test": "npx playwright test",
     "burn-in": "npx playwright test --repeat-each=20",
-    "typecheck": "tsc --noEmit",
-    "lint:check": "eslint .",
+    "typecheck": "npx tsc --noEmit",
+    "lint:check": "npx eslint .",
     "lint:fix": "eslint . --fix",
     "format:fix": "prettier --write .",
     "format:check": "prettier --check .",
