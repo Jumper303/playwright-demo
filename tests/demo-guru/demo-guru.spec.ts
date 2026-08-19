@@ -2,6 +2,8 @@ import { test } from "@fixtures/demo-guru-fixture";
 import { expect } from "@playwright/test";
 
 test("Verify Demo Guru Home Page Elements", async ({ page, demoGuruPage }) => {
+  test.slow();
+
   await test.step("Navigate to Demo Guru Home Page using the baseUrl", async () => {
     await page.goto("");
   });

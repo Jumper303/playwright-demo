@@ -1,4 +1,4 @@
-import type { Page, Locator } from "@playwright/test";
+import { type Page, type Locator, expect } from "@playwright/test";
 
 export class RichTextEditorPage {
   private page: Page;
@@ -56,7 +56,7 @@ export class RichTextEditorPage {
   }
 
   async selectTextByTextContent(searchText: string) {
-    await this.richTextEditor.evaluate((element, text) => {
+    const selectedText = await this.richTextEditor.evaluate((element, text) => {
       const doc = element.ownerDocument;
       const selection = doc.defaultView?.getSelection();
       const range = doc.createRange();
@@ -68,7 +68,7 @@ export class RichTextEditorPage {
         }
 
         const content = child.textContent;
-        // process only text nodes
+        // process only text nodes  Node.TEXT_NODE (3)
         if (child.nodeType !== 3 || content == null) {
           continue;
         }
@@ -83,10 +83,16 @@ export class RichTextEditorPage {
         range.setStart(child, start);
         range.setEnd(child, start + text.length);
         selection?.addRange(range);
-        return;
+
+        return selection?.toString() ?? "";
       }
       // text not found in any child, throw an error
       throw new Error(`Text ${text} not found in content`);
     }, searchText);
+
+    // the range was created, but make sure the browser actually applied the selection
+    expect(selectedText, `expected "${searchText}" to be selected in the rich text editor`).toBe(
+      searchText,
+    );
   }
 }
