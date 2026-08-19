@@ -9,11 +9,11 @@
   },
   "scripts": {
     "test": "npx playwright test",
-    "burn-in": "npx playwright test --repeat-each=10",
+    "burn-in": "npx playwright test --repeat-each=20",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
+    "lint:check": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
+    "format:fix": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky"
   },
@@ -34,7 +34,6 @@
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.2.0",
-    "dotenv": "^17.4.2",
     "eslint": "^10.8.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-playwright": "^2.11.0",

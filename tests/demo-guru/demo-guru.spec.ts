@@ -3,13 +3,12 @@ import { expect } from "@playwright/test";
 
 test("Verify Demo Guru Home Page Elements", async ({ page, demoGuruPage }) => {
   await test.step("Navigate to Demo Guru Home Page using the baseUrl", async () => {
-    await page.goto("", { waitUntil: "domcontentloaded" });
+    await page.goto("");
   });
 
   await test.step("Open Advertisement Image in New Tab", async () => {
     const newTab = await demoGuruPage.openAdvertisementLinkInNewTab();
-    await newTab.waitForLoadState("load");
-    expect(await newTab.title()).toContain("Selenium Live Project for Practice");
+    await expect(newTab).toHaveTitle("Selenium Live Project for Practice");
     await newTab.close();
   });
 

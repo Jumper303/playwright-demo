@@ -8,12 +8,13 @@ type UserPayload = {
 test("Verify users API", async ({ request }) => {
   const response = await test.step("Get users list", async () => {
     const res = await request.get("/users");
-    expect(res.status()).toBe(200);
+    await expect(res).toBeOK();
     return res;
   });
 
   const users = await test.step("Parse users list", async () => {
-    const usersList = JSON.parse(await response.text()) as UserPayload[];
+    // simple schema validation. In a real-world scenario, we would use a more robust schema validation library such as zod.
+    const usersList = (await response.json()) as UserPayload[];
     expect(usersList.length).toBeGreaterThan(0);
 
     /*

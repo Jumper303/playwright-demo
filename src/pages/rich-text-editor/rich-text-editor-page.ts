@@ -17,8 +17,13 @@ export class RichTextEditorPage {
     this.allowCookiesButton = this.page.getByRole("button", { name: "Allow all cookies" });
   }
 
-  async allowCookies() {
-    await this.allowCookiesButton.click();
+  async allowCookies(timeout = 5000) {
+    try {
+      await this.allowCookiesButton.waitFor({ state: "visible", timeout });
+      await this.allowCookiesButton.click();
+    } catch {
+      // popup not displayed, nothing to accept
+    }
   }
 
   async insertText(text: string) {
@@ -28,6 +33,7 @@ export class RichTextEditorPage {
   async formatText(text: string, format: string) {
     await this.richTextEditor.click();
     await this.selectTextByTextContent(text);
+
     switch (format) {
       case "bold":
         await this.boldButton.click();
@@ -69,15 +75,18 @@ export class RichTextEditorPage {
 
         const start = content.indexOf(text);
         if (start < 0) {
-          throw new Error(`Text ${text} not found in content ${content}`);
+          // text not found, continue to the next child
+          continue;
         }
 
+        selection?.removeAllRanges();
         range.setStart(child, start);
         range.setEnd(child, start + text.length);
-        selection?.removeAllRanges();
         selection?.addRange(range);
         return;
       }
+      // text not found in any child, throw an error
+      throw new Error(`Text ${text} not found in content`);
     }, searchText);
   }
 }

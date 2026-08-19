@@ -10,11 +10,11 @@ export class SauceLoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.usernameInput = this.page.locator("#user-name");
-    this.passwordInput = this.page.locator("#password");
+    this.usernameInput = this.page.getByPlaceholder("Username");
+    this.passwordInput = this.page.getByPlaceholder("Password");
     this.loginButton = this.page.getByRole("button", { name: "Login" });
-    this.productsTitle = this.page.locator('[data-test="title"]');
-    this.errorMessage = this.page.locator('[data-test="error"]');
+    this.productsTitle = this.page.getByTestId("title");
+    this.errorMessage = this.page.getByTestId("error");
   }
 
   async login(username: string, password: string) {

@@ -16,7 +16,7 @@ export class SauceCheckoutInfoPage {
     this.postalCodeInput = this.page.getByPlaceholder("Zip/Postal Code");
     this.continueButton = this.page.getByRole("button", { name: "Continue" });
     this.finishButton = this.page.getByRole("button", { name: "Finish" });
-    this.completedTitle = this.page.locator('[data-test="complete-header"]');
+    this.completedTitle = this.page.getByTestId("complete-header");
   }
 
   async fillCheckoutInfo(firstName: string, lastName: string, postalCode: string) {
